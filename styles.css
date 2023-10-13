@@ -1,0 +1,157 @@
+* {
+    box-sizing: border-box;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.main-body,
+.main-header,
+.main-nav,
+.main-main {
+    border: 2px solid red;
+}
+
+.main-body {
+    display: grid;
+    /*grid-template: 100px 1fr / 0.1fr 1fr;*/
+    grid-template: var(--bodygridtemplate);
+    grid-template-areas:
+        "main-nav header"
+        "main-nav main-main";
+}
+
+.main-header {
+    justify-self: center;
+    grid-area: header;
+    display: grid;
+
+
+}
+
+.main-nav {
+    grid-area: main-nav;
+
+}
+
+.main-main {
+    grid-area: main-main;
+}
+
+.ul-genres .li-genres {
+    display: inline;
+}
+
+.navigation-ul {
+    padding-inline-start: unset;
+}
+
+.main-main {
+    grid-area: main-main;
+    display: grid;
+    grid-template-rows: 100px 0.5fr 0.05fr 1fr;
+    grid-template-areas:
+        "genres"
+        "videos"
+        "ad-section"
+        "shorts";
+}
+
+.genres {
+    grid-area: genres;
+    border: 5px solid yellow;
+}
+
+.videos {
+    grid-area: videos;
+    border: 5px solid blue;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    /*grid-template: repeat(auto-fit, 200px) / 0.3fr 0.6fr 0.9fr ;*/
+    grid-template: var(--videosgridtemplate) ;
+}
+
+.shorts {
+    grid-area: shorts;
+    border: 5px solid green;
+}
+
+
+figure {
+    border: thin #c0c0c0 solid;
+    display: flex;
+    flex-flow: column;
+    padding: 5px;
+    max-width: 220px;
+    margin: auto;
+  }
+  
+  .preview-img {
+    max-width: 220px;
+    max-height: 150px;
+  }
+  
+  figcaption {
+    background-color: #222;
+    color: #fff;
+    font: italic smaller sans-serif;
+    padding: 3px;
+    text-align: center;
+  }
+  
+  .ad-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+  }
+
+  html{
+    --bodygridtemplate:  0.05fr 1fr / 0.1fr 1fr;
+    --videosgridtemplate: repeat(auto-fit, 200px) / 0.3fr 0.6fr 0.9fr ;
+    --theme: black;
+  }
+
+  @media screen and (max-width: 1280px) {
+    .main-body{
+        --bodygridtemplate: 0.05fr 0.1fr 1fr / 1fr;
+        grid-template-areas: 
+        "header"
+        "main-nav"
+        "main-main";
+    }
+    .videos{
+        --videosgridtemplate: repeat(auto-fit, 200px) / 0.5fr 1fr;
+    }
+  }
+  @media screen and (min-width: 769px) 
+  {
+    .main-nav {
+        display: none;
+        visibility: collapse;
+    }
+
+    .preview-img{
+        height: 100px;
+        width: 150px;
+    }
+    
+}
+@media (prefers-color-scheme: light)
+{
+    html * {
+        background-color:  #edf4f7;
+        color: #0e0e0e;
+        border-color:  #78cff5;
+    }
+}
+@media (prefers-color-scheme: dark)
+{
+    html * {
+        background-color:  #072f40;
+        color: #fefefe;
+        border-color:  #27ace6
+    }
+}
