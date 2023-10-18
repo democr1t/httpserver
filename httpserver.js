@@ -5,6 +5,7 @@ const url = require('url') // Для разрешения и разбора URL
 const port = 8000;
 const host = "localhost"
 const fs = require('fs').promises;
+const streamBuffer = require('node:stream').promises
 
 
 const mimeTypes = {
@@ -25,6 +26,22 @@ const mimeTypes = {
     
     let contentType = req.headers['Content-Type'];
 
+    if(req.url.includes("/assets/"))
+    {
+        fs.readFileSync(__dirname + req.url)
+        .then(contents => {
+            res.setHeader("Content-Type", "text/css");
+            res.writeHead(200);
+            res.end(contents);
+           
+        }).catch(err => {
+            res.writeHead(500);
+            res.end(err);
+            
+        });
+        return  
+    }
+
     // if(contentType != "application/json")
     // {
     //     res.writeHead(400);
@@ -33,7 +50,7 @@ const mimeTypes = {
 
     switch (req.url) {
         case "/page":
-            fs.readFile(__dirname + "/index.html")
+            fs.readFileSync(__dirname + "/index.html")
         .then(contents => {
             res.setHeader("Content-Type", "text/html");
             res.writeHead(200);
