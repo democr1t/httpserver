@@ -1,10 +1,10 @@
 const http = require('http') // Чтобы использовать HTTP-интерфейсы в Node.js
-// const fs = require('fs') // Для взаимодействия с файловой системой
+const fs = require('fs') // Для взаимодействия с файловой системой
 const path = require('path') // Для работы с путями файлов и каталогов
 const url = require('url') // Для разрешения и разбора URL
 const port = 8000;
 const host = "localhost"
-const fs = require('fs').promises;
+// const fs = require('fs').promises;
 const streamBuffer = require('node:stream').promises
 
 
@@ -26,44 +26,26 @@ const mimeTypes = {
     
     let contentType = req.headers['Content-Type'];
 
-    if(req.url.includes("/assets/"))
-    {
-        fs.readFileSync(__dirname + req.url)
-        .then(contents => {
-            res.setHeader("Content-Type", "text/css");
-            res.writeHead(200);
-            res.end(contents);
-           
-        }).catch(err => {
-            res.writeHead(500);
-            res.end(err);
-            
-        });
-        return  
-    }
-
-    // if(contentType != "application/json")
-    // {
-    //     res.writeHead(400);
-    //     res.end(`{"message": "header "content=type" must be 'application.json'"}`);
-    // }
+    processStatic(req,res)
 
     switch (req.url) {
         case "/page":
-            fs.readFileSync(__dirname + "/index.html")
-        .then(contents => {
+        try
+        {
+            const file = fs.readFileSync(__dirname + "/index.html")       
             res.setHeader("Content-Type", "text/html");
             res.writeHead(200);
-            res.end(contents);
-        }).catch(err => {
-            res.writeHead(500);
-            res.end(err);
-            return;
-        });
+            res.end(file, "utf-8");
+        }
+        catch(error){
+         res.writeHead(404)
+         res.end("Switch Error: " + JSON.stringify(error))
+        }
+        //
             break
         default: res.setHeader("Content-Type", "application/json");
-                res.writeHead(200);
-                res.end(`{"message": "This is a JSON response"}`);
+                res.writeHead(404);
+                res.end(`{"message": "Path not found"}`);
                 break;
   };
 }
@@ -72,3 +54,21 @@ const mimeTypes = {
   server.listen(port, host, () => {
       console.log(`Server is running on http://${host}:${port}`);
   });
+
+  function processStatic(req,res)
+  { 
+    if(req.url.includes("/assets/"))
+    {
+       try
+       {
+        const file = fs.readFileSync(__dirname + req.url)       
+            res.setHeader("Content-Type", "text/css");
+            res.writeHead(200);
+            res.end(file);
+       }
+       catch(error){
+        res.writeHead(404)
+        res.end("processStaticError: " + JSON.stringify(error))
+       }
+    }
+  }
