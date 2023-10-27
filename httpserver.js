@@ -62,6 +62,38 @@ const mimeTypes = {
              res.end("Switch Error: " + JSON.stringify(error))
             }
             break
+        case "/login": 
+            switch(req.method)
+            {
+                case "GET":
+                    try
+                    {
+                        const file = fs.readFileSync(__dirname + "/login.html")  
+                             
+                        res.setHeader("Content-Type", "text/html");
+                        res.writeHead(200);
+                        res.end(file, "utf-8");
+                    }
+                    catch(error){
+                     res.writeHead(404)
+                     res.end("Switch Error: " + JSON.stringify(error))
+                    }
+                    break
+                case "POST":
+                        let data = req.trailers
+                        // console.log(req)
+                        req.on('data', (chunk) => {
+                            data += chunk;
+                        });
+                        console.log("req.tralilers: " + req.trailers)
+                        console.log("req.rawTralilers: " + req.rawTrailers)
+                        console.log(data)
+                        res.setHeader("Content-Type", "application/json");
+                        res.writeHead(200);
+                        res.end(JSON.stringify(data) + `{"message": "LOGIN OK"}`);
+                    break
+            }
+            break
         default: 
                 res.setHeader("Content-Type", "application/json");
                 res.writeHead(404);
@@ -75,23 +107,7 @@ const mimeTypes = {
       console.log(`Server is running on http://${host}:${port}`);
   });
 
-  function processStatic(req,res)
-  { 
-    if(req.url.includes("/assets/"))
-    {
-       try
-       {
-        const file = fs.readFileSync(__dirname + req.url)       
-            res.setHeader("Content-Type", "text/css");
-            res.writeHead(200);
-            res.end(file);
-       }
-       catch(error){
-        res.writeHead(404)
-        res.end("processStaticError: " + JSON.stringify(error))
-       }
-    }
-  }
+  
 
   function processStaticStream(req,res)
   { 
