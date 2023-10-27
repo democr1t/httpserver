@@ -45,6 +45,20 @@ const mimeTypes = {
          res.end("Switch Error: " + JSON.stringify(error))
         }
             break
+        case "/about":
+            try
+            {
+                const file = fs.readFileSync(__dirname + "/about.html")  
+                     
+                res.setHeader("Content-Type", "text/html");
+                res.writeHead(200);
+                res.end(file, "utf-8");
+            }
+            catch(error){
+             res.writeHead(404)
+             res.end("Switch Error: " + JSON.stringify(error))
+            }
+            break
         default: 
                 res.setHeader("Content-Type", "application/json");
                 res.writeHead(404);
@@ -102,5 +116,33 @@ const mimeTypes = {
 
   function GetHeader()
 {
-    return `<header> </header>`
+    return `
+    <header class="main-header">
+        <form action="/search" method="get">
+            <label for="search-input">Search:</label>
+            <input type="text" id="search-input" name="q" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>		
+    </header>
+    `
+}
+
+function GetBody()
+{
+    return `
+    <body>
+        <section>
+        </section>
+    </body>
+    `
+}
+
+function GetFooter(){
+    return `
+    <footer>
+        <ul>
+            <li>first item</li>
+        </ul>
+    </footer>
+    `
 }
