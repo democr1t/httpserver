@@ -99,7 +99,8 @@ const mimeTypes = {
         const fileStream = fs.createReadStream(__dirname + req.url)
         console.log("req.url: " +  req.url)
         console.log("__dirname + req.url: " +  __dirname + req.url)
-        res.setHeader('Content-Type', "text/css")
+        console.log("mimeType: " + mimeTypes[path.extname(req.url)])
+        res.setHeader('Content-Type', mimeTypes[path.extname(req.url)])
         res.writeHead(200)
         fileStream.pipe(res)
         return true;
