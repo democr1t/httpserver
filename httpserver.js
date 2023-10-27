@@ -28,6 +28,9 @@ const mimeTypes = {
 
     if(processStaticStream(req,res))
         return
+
+    if(processApi(req,res))
+        return
     // processStatic(req,res)
 
     switch (req.url) {
@@ -113,6 +116,24 @@ const mimeTypes = {
        }
     }
     return false
+  }
+
+ function processApi(req,res)
+  {
+    if(req.url.includes("api"))
+    {
+        switch(req.url)
+        {
+            case "/api/getshowlist":
+                res.setHeader('Content-Type', "application/json")
+                const showList = ["Dicktator", "Kekmek"]
+                res.writeHead(200)
+                res.end(JSON.stringify(showList))
+                return true;         
+        }
+    }
+    
+    return false;
   }
 
   function GetHeader()
