@@ -103,19 +103,44 @@ const mimeTypes = {
                     }
                     break
                 case "POST":
-                        let data = req.trailers
+                        // let data = req.trailers
                         // console.log(req)
+                        let data
+                        const chunks = []
+                        
                         req.on('data', (chunk) => {
-                            data += chunk;
+                            chunks.push(chunk)
                         });
-                        console.log("req.tralilers: " + req.trailers)
-                        console.log("req.rawTralilers: " + req.rawTrailers)
-                        console.log(data)
-                        res.setHeader("Content-Type", "application/json");
-                        res.writeHead(200);
-                        res.end(JSON.stringify(data) + `{"message": "LOGIN OK"}`);
+                        
+                        req.on("end", () => {
+                         
+                            data = Buffer.concat(chunks);
+                            console.log("data on end: " + data)
+                            data = data.toString()
+                            data = new URLSearchParams(data)
+                            const obj = {}
+
+                            for (const key of data.keys()) {     
+                                obj[key] = data.get(key);
+                            }
+                            console.log(JSON.stringify(obj, null, 2))
+                            res.setHeader("Content-Type", "application/json");                           
+                            res.writeHead(200);
+                            res.end(JSON.stringify(obj, null, 2) + JSON.stringify({"message": "LOGIN OK"}, null, 2));                        
+                        })
+                        
                     break
             }
+            break
+        case "/test":
+            res.writeHead(200, null,
+                {
+                    'Content-Type': "text/html",
+                })
+            res.write(GetHeader())
+            res.write(GetBody())
+            res.write(GetFooter())
+            res.end()
             break
         default: 
                 res.setHeader("Content-Type", "application/json");
