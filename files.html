@@ -20,8 +20,8 @@
 	
     <ul class="navigation-ul">
         <li class="navigation-li"><a href="http://localhost:8000/page">Main Page</a></li>
-        <li class="navigation-li"><a href="http://localhost:8000/login">Login</a></li>
-        <li class="navigation-li"><a href="http://localhost:8000/files">Files</a></li>
+        <li class="navigation-li"><a href="#">Guides</a></li>
+        <li class="navigation-li"><a href="#">Plus</a></li>
         <li class="navigation-li"><a href="#">Blog</a></li>
         <li class="navigation-li"><a href="#">Play</a></li>
         <li class="navigation-li"><a href="#">Plus</a></li>
@@ -44,11 +44,20 @@
     </section>
 
     
-
-    <section class="about">
-       <div>
-            <p>leave some about information here</p>
-       </div>
+    <section class="form-section">
+        <h3>Sign up</h3>
+        <form method="POST" action="http://localhost:8000/files" id="filesform">
+            <fieldset class="sign-up-fieldset">
+                <legend>Join our comminuty</legend>
+                <label >
+                    First*: <input required type="file" name="firstfile" id="firstfile">
+                </label>
+                <label>
+                    Second*: <input required type="file" name="secondfile" id="secondfile">
+                </label>
+            </fieldset>
+            <button type="submit">Log in/button>
+        </form>
     </section>
  
 </main>

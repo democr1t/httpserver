@@ -48,6 +48,29 @@ const mimeTypes = {
          res.end("Switch Error: " + JSON.stringify(error))
         }
             break
+        case "/files":
+            if(req.method == "GET")
+            {
+                try
+                {
+                    const file = fs.readFileSync(__dirname + "/files.html")  
+                        
+                    res.setHeader("Content-Type", "text/html");
+                    res.writeHead(200);
+                    res.end(file, "utf-8");
+                }
+                catch(error)
+                {
+                    res.writeHead(404)
+                    res.end("Switch Error: " + JSON.stringify(error))
+                }
+            
+            }
+            if(req.method == "POST")
+            {
+
+            }
+            break
         case "/about":
             try
             {
