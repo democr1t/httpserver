@@ -68,7 +68,14 @@ const mimeTypes = {
             }
             if(req.method == "POST")
             {
+                let data
+                const chunks = []
+                
+                req.on('data', (chunk) => {
+                    chunks.push(chunk)
+                });
 
+                //проверить метаданные файлы можно через fs.stat
             }
             break
         case "/about":
