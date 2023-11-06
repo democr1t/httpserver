@@ -4,6 +4,7 @@ const path = require('path') // Для работы с путями файлов
 const url = require('url'); // Для разрешения и разбора URL
 const port = 8000;
 const host = "localhost"
+var formConverter = require("./formConverter.js");
 // const fs = require('fs').promises;
 const streamBuffer = require('node:stream').promises
 
@@ -74,6 +75,9 @@ const mimeTypes = {
                 req.on('data', (chunk) => {
                     chunks.push(chunk)
                 });
+
+                const objcts = formConverter.ExtractObjectsFromForm(req);
+                console.log(objcts)
 
                 //проверить метаданные файлы можно через fs.stat
             }
