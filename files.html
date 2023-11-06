@@ -46,17 +46,17 @@
     
     <section class="form-section">
         <h3>Files</h3>
-        <form method="POST" action="http://localhost:8000/files" id="filesform" boundary="boundary">
+        <form method="POST" action="http://localhost:8000/files" id="filesform" enctype="multipart/form-data">
             <fieldset class="sign-up-fieldset">
                 <legend>Join our comminuty</legend>
                 <label >
-                    First*: <input required type="file" name="firstfile" id="firstfile">
+                    First*: <input type="file" name="firstfile" id="firstfile">
                 </label>
                 <label>
-                    Second*: <input required type="file" name="secondfile" id="secondfile">
+                    Second*: <input type="file" name="secondfile" id="secondfile">
                 </label>
             </fieldset>
-            <button type="submit">Log in/button>
+            <button type="submit">Log in </button>
         </form>
     </section>
  
