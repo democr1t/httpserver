@@ -78,13 +78,12 @@ const mimeTypes = {
                     chunks.push(chunk)
                 });
 
-<<<<<<< HEAD
-                const objcts = formConverter.ExtractObjectsFromForm(req);
-                console.log(objcts)
+                
 
-=======
                 req.on("end", () => {
                     data = Buffer.concat(chunks);
+                    const objcts = formConverter.ExtractObjectsFromForm(data, formBoundary);
+                    console.log(objcts)
                     // console.log("data on end: \n" + data)
                     // data = data.toString()
                     const metaData = fs.stat("./assets/al_chernykh.jpg", (err, stats) => {
@@ -107,7 +106,6 @@ const mimeTypes = {
                 // console.log("headers: " + req.headers['content-cype'])
                 console.log(JSON.stringify(req.headers, null, 2));
                 //после работы с файлом, его удалить.
->>>>>>> b44c55a60a61e69449a64de5688a4f8b4e262db5
                 //проверить метаданные файлы можно через fs.stat
             }
             break
