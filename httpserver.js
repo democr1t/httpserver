@@ -68,6 +68,8 @@ const mimeTypes = {
             }
             if(req.method == "POST")
             {
+                const formBoundary = req.headers['content-type'].split("; ")[1].split("=")[1];
+                console.log("boundary: " + formBoundary)
                 let data
                 const chunks = []
                 
@@ -75,6 +77,30 @@ const mimeTypes = {
                     chunks.push(chunk)
                 });
 
+                req.on("end", () => {
+                    data = Buffer.concat(chunks);
+                    // console.log("data on end: \n" + data)
+                    // data = data.toString()
+                    const metaData = fs.stat("./assets/al_chernykh.jpg", (err, stats) => {
+                        console.log("meta: "+ JSON.stringify(stats, null, 2))
+                    })
+
+                    
+                    // console.log("meta: " + metaData)
+                    // console.log("data toString: \n" + data.slice(0, 300))
+                    // console.log("data end toString: \n" + data.slice(-300))
+                })
+                
+                /** 
+                 * select top 5 id, name
+                 * from users
+                 * 
+                 * 
+                 */
+
+                // console.log("headers: " + req.headers['content-cype'])
+                console.log(JSON.stringify(req.headers, null, 2));
+                //после работы с файлом, его удалить.
                 //проверить метаданные файлы можно через fs.stat
             }
             break
