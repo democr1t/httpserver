@@ -1,5 +1,8 @@
 function ExtractObjectsFromForm(formData, formBoundary){
-    const objs = []
+    // const objs = formData.split(formBoundary).join("-----------------------------------------------------------------")
+    fs.writeFileSync("foo.jpg", formData);
+    
+
     return objs
 }
 

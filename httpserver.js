@@ -82,15 +82,13 @@ const mimeTypes = {
 
                 req.on("end", () => {
                     data = Buffer.concat(chunks);
-                    const objcts = formConverter.ExtractObjectsFromForm(data, formBoundary);
-                    console.log(objcts)
-                    // console.log("data on end: \n" + data)
                     // data = data.toString()
-                    const metaData = fs.stat("./assets/al_chernykh.jpg", (err, stats) => {
-                        console.log("meta: "+ JSON.stringify(stats, null, 2))
-                    })
-
+                    const objects = formConverter.ExtractObjectsFromForm(data, formBoundary);
+                    console.log(objects)
+                    // console.log("data on end: \n" + data)
                     
+
+                    res.end(JSON.stringify(objects, null, 2))
                     // console.log("meta: " + metaData)
                     // console.log("data toString: \n" + data.slice(0, 300))
                     // console.log("data end toString: \n" + data.slice(-300))
