@@ -1,20 +1,24 @@
 const fs = require('fs')
 
 function ExtractObjectsFromForm(formData, formBoundary){
-    
-    const objs = formData.toString().split(formBoundary)
-    
-    for(let i = 0; i < objs.length; i++)
+    let objs = formData.toString().split('--'+formBoundary)
+
+    for(let i = 1; i < objs.length - 1; i++)
     {
-        // if(objs[i] != "--")
-        // {
-            fs.writeFileSync("foo" + i + ".jpg" , Buffer.from(objs[i]));
-        // }
+        try{
+            fs.unlinkSync(__dirname +"\\incomingFiles\\"+"foo" + i + ".txt", function(err)
+            {
+                if(err) return console.log(err);
+                console.log('file deleted successfully');
+            }); 
+        }
+        catch(error)
+        {
+            console.log("Error while deleting incoming file" + error)
+        }
+        
+         fs.writeFileSync(__dirname +"\\incomingFiles\\"+"foo" + i + ".txt" , Buffer.from(objs[i]));
     }
-    // fs.writeFileSync("foo.jpg", formData);
-    
-    // var stats = fs.statSync("foo.jpg")
-    // objs = stats
 
     return objs
 }
