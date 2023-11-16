@@ -70,6 +70,7 @@ const mimeTypes = {
             if(req.method == "POST")
             {
                 const formBoundary = req.headers['content-type'].split("; ")[1].split("=")[1];
+                console.log("CT:" + req.headers['content-type'])
                 console.log("boundary: " + formBoundary)
                 let data
                 const chunks = []
@@ -84,7 +85,7 @@ const mimeTypes = {
                     data = Buffer.concat(chunks);
                     // data = data.toString()
                     const objects = formConverter.ExtractObjectsFromForm(data, formBoundary);
-                    console.log(objects)
+                    // console.log(objects)
                     // console.log("data on end: \n" + data)
                     
 
@@ -102,7 +103,7 @@ const mimeTypes = {
                  */
 
                 // console.log("headers: " + req.headers['content-cype'])
-                console.log(JSON.stringify(req.headers, null, 2));
+                // console.log(JSON.stringify(req.headers, null, 2));
                 //после работы с файлом, его удалить.
                 //проверить метаданные файлы можно через fs.stat
             }
