@@ -70,10 +70,12 @@ const mimeTypes = {
             if(req.method == "POST")
             {
                 const formBoundary = req.headers['content-type'].split("; ")[1].split("=")[1];
+                console.log("REQ HEADERS:" + req.headers)
                 console.log("CT:" + req.headers['content-type'])
                 console.log("boundary: " + formBoundary)
                 let data
                 const chunks = []
+                req.setEncoding('latin1')
                 
                 req.on('data', (chunk) => {
                     chunks.push(chunk)
@@ -82,9 +84,10 @@ const mimeTypes = {
                 
 
                 req.on("end", () => {
-                    data = Buffer.concat(chunks);
+                    // data = Buffer.from(chunks);
+                    // data = chunks.join("")
                     // data = data.toString()
-                    const objects = formConverter.ExtractObjectsFromForm(data, formBoundary);
+                    const objects = formConverter.ExtractObjectsFromForm(chunks, formBoundary);
                     // console.log(objects)
                     // console.log("data on end: \n" + data)
                     
@@ -94,14 +97,6 @@ const mimeTypes = {
                     // console.log("data toString: \n" + data.slice(0, 300))
                     // console.log("data end toString: \n" + data.slice(-300))
                 })
-                
-                /** 
-                 * select top 5 id, name
-                 * from users
-                 * 
-                 * 
-                 */
-
                 // console.log("headers: " + req.headers['content-cype'])
                 // console.log(JSON.stringify(req.headers, null, 2));
                 //после работы с файлом, его удалить.
@@ -188,6 +183,9 @@ const mimeTypes = {
 }
 
   const server = http.createServer(requestListener);
+  
+
+
   server.listen(port, host, () => {
       console.log(`Server is running on http://${host}:${port}`);
   });
