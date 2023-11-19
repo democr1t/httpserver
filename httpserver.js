@@ -80,27 +80,13 @@ const mimeTypes = {
                 req.on('data', (chunk) => {
                     chunks.push(chunk)
                 });
-
                 
-
                 req.on("end", () => {
-                    // data = Buffer.from(chunks);
-                    // data = chunks.join("")
-                    // data = data.toString()
-                    const objects = formConverter.ExtractObjectsFromForm(chunks, formBoundary);
-                    // console.log(objects)
-                    // console.log("data on end: \n" + data)
-                    
-
+                    let objects = formConverter.ExtractObjectsFromForm(chunks, formBoundary);
+                    objects['jpegRes'] = CheckJPEG()
+                    objects['txtRes'] = CheckTXT()
                     res.end(JSON.stringify(objects, null, 2))
-                    // console.log("meta: " + metaData)
-                    // console.log("data toString: \n" + data.slice(0, 300))
-                    // console.log("data end toString: \n" + data.slice(-300))
                 })
-                // console.log("headers: " + req.headers['content-cype'])
-                // console.log(JSON.stringify(req.headers, null, 2));
-                //после работы с файлом, его удалить.
-                //проверить метаданные файлы можно через fs.stat
             }
             break
         case "/about":
@@ -266,4 +252,37 @@ function GetFooter(){
         </ul>
     </footer>
     `
+}
+
+function CheckJPEG()
+{
+    const responseText = {
+        "text": "No JPG files checked"
+    }
+    console.log("inside checkJPG")
+    try {
+        const dimension = imageSize('./incomingFiles/foo1.jpg')
+
+        console.log("dimensions: " + dimension)
+        console.log(dimension.width) // Image width
+        console.log(dimension.height) // Image height
+
+        if(dimension.width == 1600 && dimension.height == 630)
+            responseText.text = "Resolution is right"
+        else
+            responseText.text = "Resolution is wrong"
+    } catch (error) {
+        // Handle error here
+        responseText.text = error;
+    }
+
+    return responseText
+}
+
+function CheckTXT(){
+    const responseText = {
+        "text": "No TXT files checked"
+    }
+
+    return responseText;
 }

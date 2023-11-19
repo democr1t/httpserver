@@ -1,8 +1,15 @@
 const fs = require('fs')
 const path = require('path')
+const imageSize = require('image-size')
+const replaceExt = require('replace-ext');
 
 function ExtractObjectsFromForm(formData, formBoundary){
-    
+    let resultJPG;
+    let resultTXT;
+    let result = {
+        CheckPictureResult : resultJPG,
+        CheckTXTResult : resultTXT
+    }
     let objs = formData.join('').split('--'+formBoundary)
 
     for(let i = 0; i < objs.length; i++)
@@ -22,35 +29,19 @@ function ExtractObjectsFromForm(formData, formBoundary){
         {
             console.log("Error while deleting incoming file" + error)
         }
-
+        const fileNames = {
+            1 : "foo1.jpg",
+            2: "foo2.txt"
+        }
         let [header, content] = objs[i].split("\r\n\r\n")
-        console.log("content " + content.slice(0, 20))
-        console.log("headers: " + header)
-        fs.closeSync(fs.openSync(__dirname +"\\incomingFiles\\"+"foo" + i, "w"))
-
-        const stream = fs.createWriteStream(__dirname +"\\incomingFiles\\"+"foo" + i, {flag: "a", encoding: 'latin1'})
+        fs.closeSync(fs.openSync(__dirname +"\\incomingFiles\\"+fileNames[i], "w"))
+        const stream = fs.createWriteStream(__dirname +"\\incomingFiles\\"+fileNames[i], {flag: "a", encoding: 'latin1'})
         stream.write(content.replaceAll("\r\n", ''),)
-        
         stream.close();
-         //fs.writeFileSync(__dirname +"\\incomingFiles\\"+"foo" + i, Buffer.from(objs[i]));
-
-
     }
 
-    
-
-    return objs
+    return result
 }
 
 module.exports.ExtractObjectsFromForm = ExtractObjectsFromForm;
 
-function CheckFiles()
-{
-
-}
-
-function CheckJPEG()
-{   
-
-    path.extname('index.html')
-}
