@@ -5,9 +5,10 @@ const url = require('url'); // Для разрешения и разбора URL
 const port = 8000;
 const host = "localhost"
 var formConverter = require("./formConverter.js");
+const { error } = require('console');
 // const fs = require('fs').promises;
 const streamBuffer = require('node:stream').promises
-
+const imageSize = require('image-size')
 
 const mimeTypes = {
     '.html': 'text/html',
@@ -82,10 +83,17 @@ const mimeTypes = {
                 });
                 
                 req.on("end", () => {
-                    let objects = formConverter.ExtractObjectsFromForm(chunks, formBoundary);
-                    objects['jpegRes'] = CheckJPEG()
-                    objects['txtRes'] = CheckTXT()
-                    res.end(JSON.stringify(objects, null, 2))
+                    let objects = formConverter.ExtractObjectsFromForm(chunks, formBoundary).then((isFilesEnd) => {
+                        if(isFilesEnd)
+                        {
+                            CheckJPGPromise().then((respTxt) => {
+                                console.log(respTxt)
+                                objects['checkJPGTxt'] = respTxt
+                                objects['txtRes'] = CheckTXT()
+                                res.end(JSON.stringify(objects, null, 2))
+                            })
+                        }
+                    })               
                 })
             }
             break
@@ -253,31 +261,57 @@ function GetFooter(){
     </footer>
     `
 }
+function CheckJPGPromise(){
+    return new Promise((resolve, reject) => {
+        const responseText = {
+            "text": "No JPG files checked"
+        }
+        console.log("inside checkJPG")
+        try {
+            const dimension = imageSize(__dirname + '/incomingFiles/foo1.jpg')
+    
+            console.log("dimensions: " + dimension)
+            console.log(dimension.width) // Image width
+            console.log(dimension.height) // Image height
+            responseText['width'] = dimension.width
+            responseText['height'] = dimension.height
+            if(dimension.width == 1512 && dimension.height == 2016)
+                responseText.text = "Resolution is right"
+            else
+                responseText.text = "Resolution is wrong"
+        } catch (error) {
+            // Handle error here
+            responseText.text = error;
+        }
+    
+        resolve(responseText)
+      });
+} 
+// function CheckJPEG()
+// {
+//     const responseText = {
+//         "text": "No JPG files checked"
+//     }
+//     console.log("inside checkJPG")
+//     try {
+//         const dimension = imageSize('./incomingFiles/foo1.jpg')
 
-function CheckJPEG()
-{
-    const responseText = {
-        "text": "No JPG files checked"
-    }
-    console.log("inside checkJPG")
-    try {
-        const dimension = imageSize('./incomingFiles/foo1.jpg')
+//         console.log("dimensions: " + dimension)
+//         console.log(dimension.width) // Image width
+//         console.log(dimension.height) // Image height
+//         responseText['width'] = dimension.width
+//         responseText['height'] = dimension.height
+//         if(dimension.width == 1600 && dimension.height == 630)
+//             responseText.text = "Resolution is right"
+//         else
+//             responseText.text = "Resolution is wrong"
+//     } catch (error) {
+//         // Handle error here
+//         responseText.text = error;
+//     }
 
-        console.log("dimensions: " + dimension)
-        console.log(dimension.width) // Image width
-        console.log(dimension.height) // Image height
-
-        if(dimension.width == 1600 && dimension.height == 630)
-            responseText.text = "Resolution is right"
-        else
-            responseText.text = "Resolution is wrong"
-    } catch (error) {
-        // Handle error here
-        responseText.text = error;
-    }
-
-    return responseText
-}
+//     return responseText
+// }
 
 function CheckTXT(){
     const responseText = {
