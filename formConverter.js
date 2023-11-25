@@ -33,6 +33,11 @@ function ExtractObjectsFromForm(formData, formBoundary){
             }
         
         let [header, content] = objs[i].split("\r\n\r\n")
+        
+        if( i == 2 && header.split('\r\n')[2].split(':')[1] != ' text/plain')
+            reject({'text': 'Second file is not text/plain'})
+            
+
         // fs.closeSync(fs.openSync(__dirname +"\\incomingFiles\\"+fileNames[i], "w"))
         // const stream = fs.createWriteStream(__dirname +"\\incomingFiles\\"+fileNames[i], {flag: "a", encoding: 'latin1'})
         // stream.write(content.replaceAll("\r\n", ''),()=> console.log("I ENDED TO WRITE IN FILE"))

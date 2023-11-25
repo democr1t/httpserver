@@ -71,9 +71,9 @@ const mimeTypes = {
             if(req.method == "POST")
             {
                 const formBoundary = req.headers['content-type'].split("; ")[1].split("=")[1];
-                console.log("REQ HEADERS:" + req.headers)
-                console.log("CT:" + req.headers['content-type'])
-                console.log("boundary: " + formBoundary)
+                // console.log("REQ HEADERS:" + req.headers)
+                // console.log("CT:" + req.headers['content-type'])
+                // console.log("boundary: " + formBoundary)
                 let data
                 const chunks = []
                 req.setEncoding('latin1')
@@ -87,12 +87,15 @@ const mimeTypes = {
                         if(isFilesEnd)
                         {
                             CheckJPGPromise().then((respTxt) => {
-                                console.log(respTxt)
+                                // console.log(respTxt)
                                 objects['checkJPGTxt'] = respTxt
                                 objects['txtRes'] = CheckTXT()
                                 res.end(JSON.stringify(objects, null, 2))
                             })
                         }
+                    }).catch((any) => {
+                        objects['res'] = any
+                        res.end(JSON.stringify(objects, null, 2))
                     })               
                 })
             }
@@ -266,13 +269,12 @@ function CheckJPGPromise(){
         const responseText = {
             "text": "No JPG files checked"
         }
-        console.log("inside checkJPG")
         try {
             const dimension = imageSize(__dirname + '/incomingFiles/foo1.jpg')
     
-            console.log("dimensions: " + dimension)
-            console.log(dimension.width) // Image width
-            console.log(dimension.height) // Image height
+            // console.log("dimensions: " + dimension)
+            // console.log(dimension.width) // Image width
+            // console.log(dimension.height) // Image height
             responseText['width'] = dimension.width
             responseText['height'] = dimension.height
             if(dimension.width == 1512 && dimension.height == 2016)
@@ -287,36 +289,11 @@ function CheckJPGPromise(){
         resolve(responseText)
       });
 } 
-// function CheckJPEG()
-// {
-//     const responseText = {
-//         "text": "No JPG files checked"
-//     }
-//     console.log("inside checkJPG")
-//     try {
-//         const dimension = imageSize('./incomingFiles/foo1.jpg')
-
-//         console.log("dimensions: " + dimension)
-//         console.log(dimension.width) // Image width
-//         console.log(dimension.height) // Image height
-//         responseText['width'] = dimension.width
-//         responseText['height'] = dimension.height
-//         if(dimension.width == 1600 && dimension.height == 630)
-//             responseText.text = "Resolution is right"
-//         else
-//             responseText.text = "Resolution is wrong"
-//     } catch (error) {
-//         // Handle error here
-//         responseText.text = error;
-//     }
-
-//     return responseText
-// }
 
 function CheckTXT(){
-    const responseText = {
-        "text": "No TXT files checked"
-    }
-
-    return responseText;
+    return new Promise((resolve,reject) => {
+        const responseText = {
+            "text": "No JPG files checked"
+        }
+    })
 }
