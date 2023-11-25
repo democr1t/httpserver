@@ -34,6 +34,13 @@ function ExtractObjectsFromForm(formData, formBoundary){
         
         let [header, content] = objs[i].split("\r\n\r\n")
         
+        if(i == 2)
+            {
+                console.log("CHECKED FOR NS")
+                console.log(content)
+            }
+            
+
         if( i == 2 && header.split('\r\n')[2].split(':')[1] != ' text/plain')
             reject({'text': 'Second file is not text/plain'})
             
@@ -42,7 +49,8 @@ function ExtractObjectsFromForm(formData, formBoundary){
         // const stream = fs.createWriteStream(__dirname +"\\incomingFiles\\"+fileNames[i], {flag: "a", encoding: 'latin1'})
         // stream.write(content.replaceAll("\r\n", ''),()=> console.log("I ENDED TO WRITE IN FILE"))
         // stream.close();
-        fs.writeFileSync(__dirname +"\\incomingFiles\\"+fileNames[i], content.replaceAll("\r\n", ''), {flag: "a", encoding: 'latin1'});
+        // fs.writeFileSync(__dirname +"\\incomingFiles\\"+fileNames[i], content.replaceAll("\r\n", ''), {flag: "a", encoding: 'latin1'});
+        fs.writeFileSync(__dirname +"\\incomingFiles\\"+fileNames[i], content, {flag: "a", encoding: 'latin1'});
     }  
     resolve(true)
     })

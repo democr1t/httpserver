@@ -89,16 +89,21 @@ const mimeTypes = {
                             CheckJPGPromise().then((respTxt) => {
                                 // console.log(respTxt)
                                 objects['checkJPGTxt'] = respTxt
-                                objects['txtRes'] = CheckTXT()
-                                res.end(JSON.stringify(objects, null, 2))
+                                
+                                CheckTXT().then((txtCheckResponse) => {
+                                    objects['txtResult'] = txtCheckResponse
+                                    res.end(JSON.stringify(objects, null, 2))
+                                })                      
                             })
                         }
                     }).catch((any) => {
                         objects['res'] = any
                         res.end(JSON.stringify(objects, null, 2))
-                    })               
+                    })                             
                 })
+                
             }
+            
             break
         case "/about":
             try
@@ -295,5 +300,27 @@ function CheckTXT(){
         const responseText = {
             "text": "No JPG files checked"
         }
+
+        // const stream = fs.createReadStream('./incomingFiles/foo2.txt')
+        
+    var array = fs.readFileSync('./incomingFiles/foo2.txt').toString().split("\n");
+    for(i in array) {
+        console.log(i)
+        console.log(array[i]);
+    }
+        responseText.text = CheckFirstLine(array[0]);
+        resolve(responseText)
     })
+}
+
+function CheckFirstLine(firstLine)
+{
+    console.log("firstLine: " + firstLine)
+    console.log("typeof: "+ typeof(firstLine))
+    // firstLine === "Hello world!"
+    console.log(firstLine === 'Hello world')
+    if(firstLine === "Hello world!")
+        return "First line is right"
+    else
+        return "First line is wrong"
 }
